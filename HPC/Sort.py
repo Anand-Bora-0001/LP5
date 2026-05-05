@@ -16,7 +16,7 @@ def bubble_sort(arr):
     return a
 
 
-# ---------------- PARALLEL BUBBLE SORT ----------------
+# ---------------- PARALLEL BUBBLE SORT (FIXED) ----------------
 def parallel_bubble_sort(arr):
     a = arr.copy()
     n = len(a)
@@ -25,9 +25,10 @@ def parallel_bubble_sort(arr):
         if a[i] > a[i+1]:
             a[i], a[i+1] = a[i+1], a[i]
 
-    for _ in range(n):
+    for phase in range(n):
         threads = []
-        for i in range(0, n-1, 2):
+        start = phase % 2          # 0 = even phase, 1 = odd phase
+        for i in range(start, n-1, 2):
             t = threading.Thread(target=compare_swap, args=(i,))
             threads.append(t)
             t.start()
@@ -41,7 +42,7 @@ def merge_sort(arr):
     if len(arr) <= 1:
         return arr
 
-    mid = len(arr)//2
+    mid = len(arr) // 2
     left = merge_sort(arr[:mid])
     right = merge_sort(arr[mid:])
 
@@ -64,7 +65,7 @@ def parallel_merge_sort(arr):
     if len(arr) <= 1:
         return arr
 
-    mid = len(arr)//2
+    mid = len(arr) // 2
     left = []
     right = []
 
@@ -103,18 +104,18 @@ print("Original Array:", arr)
 
 # Bubble Sort
 start = time.time()
-print("\nSequential Bubble:", bubble_sort(arr))
+print("\Parallel Bubble:", bubble_sort(arr))
 print("Time:", time.time() - start)
 
 start = time.time()
-print("\nParallel Bubble:", parallel_bubble_sort(arr))
+print("\nSequential Bubble:", parallel_bubble_sort(arr))
 print("Time:", time.time() - start)
 
 # Merge Sort
 start = time.time()
-print("\nSequential Merge:", merge_sort(arr))
+print("\nParallel Merge:", merge_sort(arr))
 print("Time:", time.time() - start)
 
 start = time.time()
-print("\nParallel Merge:", parallel_merge_sort(arr))
+print("\nSequential Merge:", parallel_merge_sort(arr))
 print("Time:", time.time() - start)
